@@ -1,4 +1,7 @@
-import { selectMatchingUser, sendFailure, sendSuccess } from "../utils.js";
+import { sendFailure, sendSuccess } from "../utils.js";
+
+export const getUser = (db, email) =>
+  db.prepare("select * from users where email = ?;").all(email);
 
 export const updateUserLogin = (DB, email) =>
   DB.prepare("update users set last_login = ? where email = ?;").run(
@@ -8,9 +11,9 @@ export const updateUserLogin = (DB, email) =>
 
 export const login = (body, storage) => {
   const { email, password } = body;
-  const user = selectMatchingUser(storage, email);
+  const [user] = getUser(storage, email);
 
-  if (user.length === 0) return sendFailure("User not found", 404);
+  if (!user) return sendFailure("User not found", 404);
 
   if (user.password !== password)
     return sendFailure("Credentials aren't correct", 400);

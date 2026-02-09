@@ -15,8 +15,9 @@ describe("testing Login functionality with in-memory DB", () => {
     };
 
     db.exec(
-      "create table users(email text unique not null,password text not null,username text not null);",
+      "create table users(email text unique not null,password text not null,username text not null,last_login text);",
     );
+
     const { email, username, password } = data;
     insertNewUserOn(db, [email, password, username]);
   });
@@ -31,10 +32,16 @@ describe("testing Login functionality with in-memory DB", () => {
       assertEquals(await response.text(), "User not found");
     });
 
-    // it("testing with existing userData", async () => {
-    //   const response = login(data, db);
-    //   assertEquals(await response.text(), "User Login successful");
-    //   assertEquals(response.status, 200);
-    // });
+    it("testing with existing userData", async () => {
+      const response = login(data, db);
+      assertEquals(await response.text(), "User Login successful");
+      assertEquals(response.status, 200);
+    });
+
+    it("testing with existing userData but with wrong password", async () => {
+      const response = login({ email: data.email, password: "hello" }, db);
+      assertEquals(await response.text(), "Credentials aren't correct");
+      assertEquals(response.status, 400);
+    });
   });
 });
