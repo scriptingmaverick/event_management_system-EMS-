@@ -77,7 +77,7 @@ describe("testing createUser functionality with in-memory DB", () => {
         assertEquals(result.text(), response.text());
       });
     });
-  })
+  });
 
   describe("testing createUser function", () => {
     it("testing with non-existing userData",async () => {
@@ -88,8 +88,8 @@ describe("testing createUser functionality with in-memory DB", () => {
       assertEquals(response.status, 201);
       assertEquals(await response.text(),'User created successfully')
     });
+
     it("testing with existing userData",async () => {
-     
       const response = createUser(data, db);
       assertEquals(response.status, 401);
       assertEquals(await response.text(),'Email already exists')
