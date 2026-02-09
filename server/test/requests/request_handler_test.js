@@ -5,8 +5,7 @@ import { parse } from "../../src/requests/request_handler.js";
 describe("testing parser", () => {
   it("testing with invalid request", () => {
     assertRejects(async () => await parse("hello"));
-  });
-
+  })
   describe("testing with GET method", () => {
     it("testing with valid request", async () => {
       const request = new Request("http://localhost:8080");
