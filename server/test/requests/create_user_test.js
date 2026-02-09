@@ -77,7 +77,7 @@ describe("testing createUser functionality with in-memory DB", () => {
         assertEquals(result.text(), response.text());
       });
     });
-  });
+  })
 
   describe("testing createUser function", () => {
     it("testing with non-existing userData",async () => {
