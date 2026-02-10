@@ -7,6 +7,7 @@ import { updateEvent } from "./event/update_event.js";
 import { cancelEvent } from "./event/cancel_event.js";
 import { DatabaseSync } from "node:sqlite";
 import { createEnrollment } from "./enrollment/create_enrollment.js";
+import { cancelEnrollment } from "./enrollment/cancel_enrollment.js";
 
 export const createBody = async (method, request) => {
   if (method === "POST") {
@@ -82,6 +83,7 @@ export const requestHandler = async (request) => {
     "/update-event": updateEvent,
     "/cancel-event": cancelEvent,
     "/enroll": createEnrollment,
+    "/cancel-enrollment": cancelEnrollment,
   };
 
   return apisToFns[path](db, body);
