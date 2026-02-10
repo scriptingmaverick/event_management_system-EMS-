@@ -1,5 +1,5 @@
 import { describe, it } from "@std/testing";
-import { assertEquals, assertThrows } from "@std/assert";
+import { assertEquals } from "@std/assert";
 import { DatabaseSync } from "node:sqlite";
 import { updateEvent } from "../../../src/requests/event/update_event.js";
 
@@ -43,14 +43,18 @@ describe("testing updateEvent functionality with in-memory DB", () => {
       capacity,
       entry_fee,
       updated_at,
+      event_id: 1,
     };
-    const response = updateEvent(db, 1, body);
+    const response = updateEvent(db, body);
     assertEquals(response.status, 202);
     assertEquals(await response.text(), "Event details updated");
   });
 
   it("testing with changing only 1-column", async () => {
-    const response = updateEvent(db, 1, { event_title: "my concert" });
+    const response = updateEvent(db, {
+      event_id: 1,
+      event_title: "my concert",
+    });
     assertEquals(response.status, 202);
     assertEquals(await response.text(), "Event details updated");
   });

@@ -13,7 +13,7 @@ describe("testing Login functionality with in-memory DB", () => {
       password: "hi",
       username: "hello",
     };
-
+    
     db.exec(
       "create table users(email text unique not null,password text not null,username text not null,last_login text);",
     );
@@ -27,19 +27,19 @@ describe("testing Login functionality with in-memory DB", () => {
       let { email, password } = data;
       email = "new@gmail.com";
       const body = { email, password };
-      const response = login(body, db);
+      const response = login(db, body);
       assertEquals(response.status, 404);
       assertEquals(await response.text(), "User not found");
     });
 
     it("testing with existing userData", async () => {
-      const response = login(data, db);
+      const response = login(db, data);
       assertEquals(await response.text(), "User Login successful");
       assertEquals(response.status, 200);
     });
 
     it("testing with existing userData but with wrong password", async () => {
-      const response = login({ email: data.email, password: "hello" }, db);
+      const response = login(db, { email: data.email, password: "hello" });
       assertEquals(await response.text(), "Credentials aren't correct");
       assertEquals(response.status, 400);
     });

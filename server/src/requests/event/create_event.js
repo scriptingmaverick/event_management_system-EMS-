@@ -2,18 +2,18 @@ import { sendFailure, sendSuccess } from "../../utils.js";
 
 export const insertNewEventOn = (DB, data) => {
   return DB.prepare(
-    "insert into events(event_title,description,type,status, event_date, location,capacity,updated_at,user_id) values(?,?,?,?,?,?,?,?,?);",
+    "insert into events(event_title,description,type,status, location,capacity,entry_fee,user_id) values(?,?,?,?,?,?,?,?);",
   )
     .run(...data);
 };
 
-export const createEvent = (DB, { user_id }, body) => {
+export const createEvent = (DB, body) => {
   const data = Object.values(body);
-  data.push(user_id);
   try {
     insertNewEventOn(DB, data);
+
     return sendSuccess("Event created", 200);
-  } catch {
-    return sendFailure("Internal error", 501);
+  } catch (e) {
+    return sendFailure(e.message, 501);
   }
 };

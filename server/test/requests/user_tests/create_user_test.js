@@ -1,7 +1,10 @@
 import { describe, it } from "@std/testing";
 import { assertEquals, assertThrows } from "@std/assert";
 import { DatabaseSync } from "node:sqlite";
-import { insertNewUserOn, createUser } from "../../../src/requests/user/create_user.js";
+import {
+  createUser,
+  insertNewUserOn,
+} from "../../../src/requests/user/create_user.js";
 
 describe("testing createUser functionality with in-memory DB", () => {
   const db = new DatabaseSync(":memory:");
@@ -32,13 +35,13 @@ describe("testing createUser functionality with in-memory DB", () => {
       let { email, password, username } = data;
       email = "new@gmail.com";
       const body = { email, password, username };
-      const response = createUser(body, db);
+      const response = createUser(db, body);
       assertEquals(response.status, 201);
       assertEquals(await response.text(), "User created successfully");
     });
 
     it("testing with existing userData", async () => {
-      const response = createUser(data, db);
+      const response = createUser(db, data);
       assertEquals(response.status, 401);
       assertEquals(await response.text(), "Email already exists");
     });

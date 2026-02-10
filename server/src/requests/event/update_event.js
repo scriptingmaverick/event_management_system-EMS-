@@ -1,8 +1,11 @@
 import { createUpdateQuery, sendFailure, sendSuccess } from "../../utils.js";
 
-export const updateEvent = (db, eventId, body) => {
+export const updateEvent = (db, body) => {
+  const { event_id } = body;
+  delete body["event_id"];
+
   const [query, values] = createUpdateQuery(
-    { event_id: eventId },
+    { event_id },
     body,
     "events",
     "event_id",
@@ -11,7 +14,7 @@ export const updateEvent = (db, eventId, body) => {
   try {
     db.prepare(query).run(...values);
     return sendSuccess("Event details updated", 202);
-  } catch {
-    return sendFailure("Interval server error", 501);
+  } catch (e) {
+    return sendFailure(e.message, 501);
   }
 };

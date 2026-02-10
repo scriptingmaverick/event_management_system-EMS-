@@ -1,24 +1,30 @@
-import { sendFailure, sendSuccess } from "../../utils.js";
+import {
+  saveToFile,
+  selectMatchingUser,
+  sendFailure,
+  sendSuccess,
+} from "../../utils.js";
 
-export const getUser = (db, email) =>
-  db.prepare("select * from users where email = ?;").all(email);
-
-export const updateUserLogin = (DB, email) =>
-  DB.prepare("update users set last_login = ? where email = ?;").run(
-    new Date().toISOString,
+export const updateUserLogin = (db, email) =>
+  db.prepare("update users set last_login = ? where email = ?;").run(
+    new Date().toLocaleString(),
     email,
   );
 
-export const login = (body, storage) => {
+export const login = (db, body) => {
   const { email, password } = body;
-  const [user] = getUser(storage, email);
+  const [user] = selectMatchingUser(db, email);
 
   if (!user) return sendFailure("User not found", 404);
 
-  if (user.password !== password)
+  if (user.password !== password) {
     return sendFailure("Credentials aren't correct", 400);
+  }
 
-  updateUserLogin(storage, email);
+  updateUserLogin(db, email);
+
+  const userData = selectMatchingUser(db, email)[0];
+  saveToFile(userData);
 
   return sendSuccess("User Login successful");
 };

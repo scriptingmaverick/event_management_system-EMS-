@@ -20,13 +20,13 @@ describe("testing cancelEvent functionality with in-memory DB", () => {
   db.exec(
     "create table events(event_id integer primary key autoincrement, event_title text not null,type text not null,description text,location text,capacity integer,entry_fee integer,event_date text,updated_at text,status text);",
   );
-
+  
   db.prepare(
     "insert into events(event_title,type,description,location,capacity,entry_fee,event_date,updated_at,status) values(?,?,?,?,?,?,?,?,?);",
   ).run(...Object.values(data));
 
   it("testing with changing status to cancellation", async () => {
-    const response = cancelEvent(db, 1);
+    const response = cancelEvent(db, { "event_id": 1 });
     assertEquals(response.status, 200);
     assertEquals(await response.text(), "Event cancelled");
   });

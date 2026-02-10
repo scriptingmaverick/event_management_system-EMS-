@@ -15,10 +15,9 @@ describe("create event functionality", () => {
     "description": "",
     "type": "music concert",
     "status": "confirmed",
-    "event_date": "10-02-2026",
     "location": "bangalore",
     "capacity": 25,
-    "updated_at": "10-01-2029",
+    "entry_fee": 200,
     "user_id": 1,
   };
   db.exec(
@@ -29,9 +28,8 @@ describe("create event functionality", () => {
     description text not null,
     type text not null,
     status text not null,
-    event_date text not null,
+    entry_fee integer,
     location text not null,
-    updated_at text not null,
     capacity integer not null);`,
   );
 
@@ -43,6 +41,7 @@ describe("create event functionality", () => {
       const dataInDb = db.prepare("select * from events;").all();
       assertEquals(dataInDb, [data]);
     });
+
     it("2. without arguments", () => {
       assertThrows(() => insertNewEventOn());
     });
@@ -50,11 +49,9 @@ describe("create event functionality", () => {
 
   describe("testing create event functionality", () => {
     it("1. with valid data", async () => {
-      const userDetails = { user_id: 1 };
       const body = Object.values(data);
       body.shift();
-      body.pop();
-      const response = createEvent(db, userDetails, body);
+      const response = createEvent(db, body);
       assertEquals(response.status, 200);
       assertEquals(await response.text(), "Event created");
     });

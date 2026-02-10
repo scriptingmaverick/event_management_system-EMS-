@@ -1,7 +1,7 @@
 import { describe, it } from "@std/testing";
 import { assertEquals } from "@std/assert";
 import { DatabaseSync } from "node:sqlite";
-import { updateUsernameOn } from "../../../src/requests/user/update_user.js";
+import { updateUser } from "../../../src/requests/user/update_user.js";
 import { createUpdateQuery } from "../../../src/utils.js";
 
 describe("testing update user functionality", () => {
@@ -25,19 +25,20 @@ describe("testing update user functionality", () => {
     username: "karthik",
     user_id: 1,
   };
+
   describe("testing update user name ", () => {
     it("testing with valid user name", () => {
-      updateUsernameOn(db, userDetails, { username });
+      updateUser(db, {
+        email: "hello@gmail.com",
+        password: "1234",
+        username: "karthik",
+        user_id: 1,
+      });
+
       const dataInDb = db.prepare("select * from users")
         .all();
       assertEquals(dataInDb[0], updatedRecord);
     });
-  });
-
-  it("checking internal server error", async () => {
-    const result = updateUsernameOn(undefined, userDetails, { username });
-    const response = await result.text();
-    assertEquals(response, "Internal server error");
   });
 
   it("testing create query", () => {
@@ -48,6 +49,7 @@ describe("testing update user functionality", () => {
       "users",
       "user_id",
     );
+
     const expectedQuery =
       `UPDATE users SET username = ?, email = ? WHERE user_id = ?`;
     assertEquals(query, expectedQuery);

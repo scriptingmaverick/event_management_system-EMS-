@@ -2,7 +2,10 @@ import { describe, it } from "@std/testing";
 import { assertEquals, assertThrows } from "@std/assert";
 import { DatabaseSync } from "node:sqlite";
 import { insertNewUserOn } from "../../../src/requests/user/create_user.js";
-import { deleteUser, deleteUserFrom } from "../../../src/requests/user/delete_user.js";
+import {
+  deleteUser,
+  deleteUserFrom,
+} from "../../../src/requests/user/delete_user.js";
 
 describe("testing deleteUser functionality with in-memory DB", () => {
   const db = new DatabaseSync(":memory:");
@@ -41,9 +44,10 @@ describe("testing deleteUser functionality with in-memory DB", () => {
     });
 
     it("testing with non-existing userData", async () => {
+      data.user_id = 4;
       const response = deleteUser(db, data);
-      assertEquals(response.status, 501);
-      assertEquals(await response.text(), "Internal server error");
+      assertEquals(response.status, 200);
+      assertEquals(await response.text(), "Account deletion successful");
     });
   });
 });

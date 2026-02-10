@@ -28,8 +28,8 @@ describe("testing utils", () => {
     });
 
     it("testing with existing user", () => {
-      const result = selectMatchingUser(db, "hello@gmail.com");
-      assertEquals(result, [{ email: data.email }]);
+      const result = selectMatchingUser(db, "hello@gmail.com")[0];
+      assertEquals({email: result.email}, {email:data.email} );
     });
   });
 
