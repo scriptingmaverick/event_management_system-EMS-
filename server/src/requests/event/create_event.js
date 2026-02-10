@@ -2,7 +2,7 @@ import { sendFailure, sendSuccess } from "../../utils.js";
 
 export const insertNewEventOn = (DB, data) => {
   return DB.prepare(
-    "insert into events(event_title, location,capacity,user_id) values(?,?,?,?);",
+    "insert into events(event_title,description,type,status, event_date, location,capacity,updated_at,user_id) values(?,?,?,?,?,?,?,?,?);",
   )
     .run(...data);
 };

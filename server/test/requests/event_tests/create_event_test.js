@@ -12,24 +12,33 @@ describe("create event functionality", () => {
   const data = {
     "event_id": 1,
     "event_title": "music concert",
-    "capacity": 25,
-    "user_id": 1,
+    "description": "",
+    "type": "music concert",
+    "status": "confirmed",
+    "event_date": "10-02-2026",
     "location": "bangalore",
+    "capacity": 25,
+    "updated_at": "10-01-2029",
+    "user_id": 1,
   };
   db.exec(
     `create table events(
     event_id integer primary key autoincrement,
-    event_title text  not null,
     user_id integer not null,
+    event_title text  not null,
+    description text not null,
+    type text not null,
+    status text not null,
+    event_date text not null,
     location text not null,
+    updated_at text not null,
     capacity integer not null);`,
   );
-  const userDetails = { "user_id": 1 };
 
   describe("testing insert new event", () => {
     it("1. Test with valid values", () => {
-      const { event_title, location, capacity } = data;
-      const body = [event_title, location, capacity, userDetails.user_id];
+      const body = Object.values(data);
+      body.shift();
       insertNewEventOn(db, body);
       const dataInDb = db.prepare("select * from events;").all();
       assertEquals(dataInDb, [data]);
@@ -42,10 +51,10 @@ describe("create event functionality", () => {
   describe("testing create event functionality", () => {
     it("1. with valid data", async () => {
       const userDetails = { user_id: 1 };
-      const { event_title, capacity, location } = data;
-      const body = { event_title, capacity, location };
+      const body = Object.values(data);
+      body.shift();
+      body.pop();
       const response = createEvent(db, userDetails, body);
-      console.log(response);
       assertEquals(response.status, 200);
       assertEquals(await response.text(), "Event created");
     });
