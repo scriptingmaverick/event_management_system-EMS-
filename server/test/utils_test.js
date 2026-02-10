@@ -1,7 +1,7 @@
 import { beforeAll, describe, it } from "@std/testing";
 import { assertEquals } from "@std/assert";
 import { DatabaseSync } from "node:sqlite";
-import { insertNewUserOn } from "../src/requests/create_user.js";
+import { insertNewUserOn } from "../src/requests/user/create_user.js";
 import { selectMatchingUser, sendFailure, sendSuccess } from "../src/utils.js";
 
 describe("testing utils", () => {

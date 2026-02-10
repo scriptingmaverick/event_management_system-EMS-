@@ -1,4 +1,4 @@
-import { sendFailure, sendSuccess } from "../utils.js";
+import { sendFailure, sendSuccess } from "../../utils.js";
 
 export const deleteUserFrom = (db, userId) =>
   db.prepare("delete from users where user_id = ?;").run(userId);

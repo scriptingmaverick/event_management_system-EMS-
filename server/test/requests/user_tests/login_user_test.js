@@ -1,8 +1,8 @@
 import { beforeAll, describe, it } from "@std/testing";
 import { assertEquals } from "@std/assert";
 import { DatabaseSync } from "node:sqlite";
-import { login } from "../../src/requests/login_user.js";
-import { insertNewUserOn } from "../../src/requests/create_user.js";
+import { login } from "../../../src/requests/user/login_user.js";
+import { insertNewUserOn } from "../../../src/requests/user/create_user.js";
 
 describe("testing Login functionality with in-memory DB", () => {
   let db, data;

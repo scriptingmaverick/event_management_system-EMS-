@@ -1,4 +1,4 @@
-import { sendFailure, sendSuccess } from "../utils.js";
+import { sendFailure, sendSuccess } from "../../utils.js";
 
 export const createQuery = (userDetails, body) => {
   const query = [];

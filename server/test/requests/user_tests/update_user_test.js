@@ -4,7 +4,7 @@ import { DatabaseSync } from "node:sqlite";
 import {
   createQuery,
   updateUsernameOn,
-} from "../../src/requests/update_user.js";
+} from "../../../src/requests/user/update_user.js";
 
 describe("testing update user functionality", () => {
   const db = new DatabaseSync(":memory:");

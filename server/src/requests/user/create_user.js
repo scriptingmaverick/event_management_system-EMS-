@@ -1,4 +1,4 @@
-import { selectMatchingUser, sendFailure, sendSuccess } from "../utils.js";
+import { selectMatchingUser, sendFailure, sendSuccess } from "../../utils.js";
 
 export const insertNewUserOn = (DB, data) =>
   DB.prepare("insert into users(email,password,username) values(?,?,?);").run(

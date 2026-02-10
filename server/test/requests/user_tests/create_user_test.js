@@ -1,7 +1,7 @@
 import { describe, it } from "@std/testing";
 import { assertEquals, assertThrows } from "@std/assert";
 import { DatabaseSync } from "node:sqlite";
-import { insertNewUserOn, createUser } from "../../src/requests/create_user.js";
+import { insertNewUserOn, createUser } from "../../../src/requests/user/create_user.js";
 
 describe("testing createUser functionality with in-memory DB", () => {
   const db = new DatabaseSync(":memory:");

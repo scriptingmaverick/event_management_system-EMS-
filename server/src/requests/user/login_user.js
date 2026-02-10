@@ -1,4 +1,4 @@
-import { sendFailure, sendSuccess } from "../utils.js";
+import { sendFailure, sendSuccess } from "../../utils.js";
 
 export const getUser = (db, email) =>
   db.prepare("select * from users where email = ?;").all(email);
