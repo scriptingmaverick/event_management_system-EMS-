@@ -8,7 +8,7 @@ export const deleteUser = (db, userData) => {
   try {
     deleteUserFrom(db, user_id);
     return sendSuccess("Account deletion successful");
-  } catch (e) {
+  } catch {
     return sendFailure("Internal server error", 501);
   }
 };

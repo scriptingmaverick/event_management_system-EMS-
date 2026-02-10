@@ -1,7 +1,7 @@
 import { describe, it } from "@std/testing";
 import { assertEquals, assertThrows } from "@std/assert";
 import { DatabaseSync } from "node:sqlite";
-import { createUser, insertNewUserOn } from "../../src/requests/create_user.js";
+import { insertNewUserOn } from "../../src/requests/create_user.js";
 import { deleteUser, deleteUserFrom } from "../../src/requests/delete_user.js";
 
 describe("testing deleteUser functionality with in-memory DB", () => {
