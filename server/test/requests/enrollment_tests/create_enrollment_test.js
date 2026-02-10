@@ -13,17 +13,28 @@ describe("Create enrollment", () => {
     "user_id": 1,
   };
   db.exec(`CREATE TABLE IF NOT EXISTS enrollments(
-    enrollment_id INTEGER PRIMARY KEY AUTOINCREMENT,
     event_id INTEGER,
     user_id INTEGER,
     status TEXT DEFAULT('confirmed'),
-    created_at TEXT DEFAULT(DATETIME('now','localtime'))
+    created_at TEXT DEFAULT(DATETIME('now','localtime')),
+
+    PRIMARY KEY(event_id, user_id),
+    FOREIGN KEY(event_id) REFERENCES events(event_id),
+    FOREIGN KEY(user_id) REFERENCES users(user_id)
     );`);
+
   db.exec(`CREATE TABLE IF NOT EXISTS events(
-      event_id integer,
+      event_id integer PRIMARY KEY,
       attendees integer default(0)
       );`);
+
+  db.exec(`CREATE TABLE IF NOT EXISTS users(
+      user_id integer PRIMARY KEY
+      );`);
+
   db.prepare(`INSERT into events (event_id) values(?)`).run(1);
+  db.prepare(`INSERT into users (user_id) values(?)`).run(1);
+
   describe("insert to new enrollment", () => {
     it("with valid data", () => {
       const values = Object.values(data);
@@ -38,9 +49,19 @@ describe("Create enrollment", () => {
 
   describe("create enrollment", () => {
     it("create enrollment with valid data", async () => {
+      db.prepare("delete from enrollments where user_id = 1;").run();
       const response = createEnrollment(db, data);
-      assertEquals(response.status, 201);
       assertEquals(await response.text(), "Enrolled successfully");
+      assertEquals(response.status, 201);
+    });
+
+    it("create enrollment with same user_id and event_id", async () => {
+      const response = createEnrollment(db, data);
+      assertEquals(
+        await response.text(),
+        "UNIQUE constraint failed: enrollments.event_id, enrollments.user_id",
+      );
+      assertEquals(response.status, 401);
     });
 
     it("with invalid data", async () => {

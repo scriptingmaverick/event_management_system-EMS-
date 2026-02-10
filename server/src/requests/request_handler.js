@@ -43,11 +43,11 @@ const createTables = (db) => {
     CREATE TABLE IF NOT EXISTS events(
     event_id INTEGER PRIMARY KEY AUTOINCREMENT,
     event_title TEXT,
-    type TEXT,
     description TEXT,
+    type TEXT,
+    status TEXT,
     location TEXT,
     capacity INTEGER,
-    status TEXT,
     entry_fee INTEGER,
     attendees INTEGER DEFAULT(0),
     event_date DEFAULT (DATETIME('now','localtime')),
@@ -58,11 +58,15 @@ const createTables = (db) => {
     );
 
     CREATE TABLE IF NOT EXISTS enrollments(
-    enrollment_id INTEGER PRIMARY KEY AUTOINCREMENT,
     event_id INTEGER,
-    user_id INTEGER UNIQUE,
+    user_id INTEGER,
     status TEXT DEFAULT('confirmed'),
-    created_at TEXT DEFAULT(DATETIME('now','localtime')));
+    created_at TEXT DEFAULT(DATETIME('now','localtime')),
+
+    PRIMARY KEY(event_id, user_id),
+    FOREIGN KEY(event_id) REFERENCES events(event_id),
+    FOREIGN KEY(user_id) REFERENCES users(user_id)
+    );
     `);
 };
 

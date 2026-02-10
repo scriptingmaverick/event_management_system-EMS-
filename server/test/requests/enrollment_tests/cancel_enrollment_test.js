@@ -14,19 +14,27 @@ describe("Cancel enrollment", () => {
   };
 
   db.exec(`CREATE TABLE IF NOT EXISTS enrollments(
-    enrollment_id INTEGER PRIMARY KEY AUTOINCREMENT,
     event_id INTEGER,
     user_id INTEGER,
     status TEXT DEFAULT('confirmed'),
-    created_at TEXT DEFAULT(DATETIME('now','localtime'))
+    created_at TEXT DEFAULT(DATETIME('now','localtime')),
+
+    PRIMARY KEY(event_id, user_id),
+    FOREIGN KEY(event_id) REFERENCES events(event_id),
+    FOREIGN KEY(user_id) REFERENCES users(user_id)
     );`);
 
   db.exec(`CREATE TABLE IF NOT EXISTS events(
-      event_id integer,
+      event_id integer PRIMARY KEY,
       attendees integer default(0)
       );`);
 
+  db.exec(`CREATE TABLE IF NOT EXISTS users(
+      user_id integer PRIMARY KEY
+      );`);
+
   db.prepare(`INSERT into events (event_id) values(?)`).run(1);
+  db.prepare(`INSERT into users (user_id) values(?)`).run(1);
   db.prepare(`INSERT into enrollments (event_id, user_id) values(?,?)`)
     .run(1, 1);
 
