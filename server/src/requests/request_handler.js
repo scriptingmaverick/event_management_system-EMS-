@@ -6,6 +6,7 @@ import { createEvent } from "./event/create_event.js";
 import { updateEvent } from "./event/update_event.js";
 import { cancelEvent } from "./event/cancel_event.js";
 import { DatabaseSync } from "node:sqlite";
+import { createEnrollment } from "./enrollment/create_enrollment.js";
 
 export const createBody = async (method, request) => {
   if (method === "POST") {
@@ -47,12 +48,20 @@ const createTables = (db) => {
     capacity INTEGER,
     status TEXT,
     entry_fee INTEGER,
+    attendees INTEGER DEFAULT(0),
     event_date DEFAULT (DATETIME('now','localtime')),
     created_at DEFAULT (DATETIME('now','localtime')),
     updated_at DEFAULT (DATETIME('now','localtime')),
     user_id INTEGER,
     FOREIGN KEY (user_id) REFERENCES users(user_id)
     );
+
+    CREATE TABLE IF NOT EXISTS enrollments(
+    enrollment_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    event_id INTEGER,
+    user_id INTEGER UNIQUE,
+    status TEXT DEFAULT('confirmed'),
+    created_at TEXT DEFAULT(DATETIME('now','localtime')));
     `);
 };
 
@@ -72,6 +81,7 @@ export const requestHandler = async (request) => {
     "/create-event": createEvent,
     "/update-event": updateEvent,
     "/cancel-event": cancelEvent,
+    "/enroll": createEnrollment,
   };
 
   return apisToFns[path](db, body);

@@ -1,13 +1,13 @@
 import { assertEquals, assertThrows } from "@std/assert";
-import { describe } from "@std/testing";
+import { describe,it } from "@std/testing";
+import { DatabaseSync } from "node:sqlite";
 import {
   createEvent,
   insertNewEventOn,
 } from "../../../src/requests/event/create_event.js";
-import { DatabaseSync } from "node:sqlite";
-import { it } from "node:test";
 
 describe("create event functionality", () => {
+  
   const db = new DatabaseSync(":memory:");
   const data = {
     "event_id": 1,
