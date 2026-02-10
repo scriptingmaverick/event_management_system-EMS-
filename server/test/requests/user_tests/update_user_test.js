@@ -1,10 +1,8 @@
 import { describe, it } from "@std/testing";
 import { assertEquals } from "@std/assert";
 import { DatabaseSync } from "node:sqlite";
-import {
-  createQuery,
-  updateUsernameOn,
-} from "../../../src/requests/user/update_user.js";
+import { updateUsernameOn } from "../../../src/requests/user/update_user.js";
+import { createUpdateQuery } from "../../../src/utils.js";
 
 describe("testing update user functionality", () => {
   const db = new DatabaseSync(":memory:");
@@ -44,10 +42,15 @@ describe("testing update user functionality", () => {
 
   it("testing create query", () => {
     const body = { username: "karthik", email: "karthik@gmail.com" };
-    const [query, values] = createQuery(userDetails, body);
+    const [query, values] = createUpdateQuery(
+      userDetails,
+      body,
+      "users",
+      "user_id",
+    );
     const expectedQuery =
       `UPDATE users SET username = ?, email = ? WHERE user_id = ?`;
     assertEquals(query, expectedQuery);
-    assertEquals(values, ["karthik", "karthik@gmail.com", 1])
+    assertEquals(values, ["karthik", "karthik@gmail.com", 1]);
   });
 });
