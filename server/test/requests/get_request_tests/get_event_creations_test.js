@@ -3,7 +3,7 @@ import { describe, it } from "@std/testing";
 import { getEventsByUser } from "../../../src/requests/get_requests/get_event_creations.js";
 import { DatabaseSync } from "node:sqlite";
 
-describe("Get events by user", () => {
+describe("Get events created by user", () => {
   const db = new DatabaseSync(":memory:");
   db.exec(`CREATE TABLE events(
     user_id integer,
