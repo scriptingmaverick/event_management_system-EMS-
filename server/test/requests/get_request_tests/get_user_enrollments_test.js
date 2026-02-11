@@ -42,7 +42,7 @@ describe("get user enrollments", () => {
   );
   const userData = { user_id: 1 };
   describe("get event enrolled by user", () => {
-    it("1. get event enrolled by user ", async() => {
+    it("1. get event enrolled by user ", () => {
       const response = getEventByUserEnrollments(db, userData);
       assertEquals(response.status, 200)
     });
