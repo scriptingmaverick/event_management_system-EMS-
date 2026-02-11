@@ -11,7 +11,6 @@ describe("Get events by user", () => {
     event_title text,
     type text
     );`);
-  const data = { user_id: 1 };
   db.prepare(
     `INSERT INTO events (user_id, event_id, event_title,type) values(?,?,?,?)`,
   )
