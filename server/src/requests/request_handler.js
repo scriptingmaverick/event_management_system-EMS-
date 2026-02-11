@@ -61,7 +61,7 @@ const createTables = (db) => {
     event_id INTEGER,
     user_id INTEGER,
     status TEXT DEFAULT('confirmed'),
-    created_at TEXT DEFAULT(DATETIME('now','localtime')),
+    enrolled_at TEXT DEFAULT(DATETIME('now','localtime')),
 
     PRIMARY KEY(event_id, user_id),
     FOREIGN KEY(event_id) REFERENCES events(event_id),
