@@ -1,9 +1,11 @@
-export const getEventsByUser = (db, lookUpValue) => {
+import { createResponse } from "../../utils.js";
+
+export const getEventsByUser = (db, userData) => {
   try {
-    const query = `SELECT * FROM events WHERE user_id = ?`;
-    const result = db.prepare(query).get(lookUpValue);
-    return { success: true, body: result, status: 200 };
+    const query = `SELECT * FROM events WHERE user_id = ?;`;
+    const result = db.prepare(query).all(userData.user_id);
+    return createResponse({ success: true, data: result });
   } catch (e) {
-    return { success: false, message: e.message, body: {}, status: 401 };
+    return createResponse({ success: false, data: e.message }, 401);
   }
 };

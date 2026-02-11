@@ -11,6 +11,14 @@ export const saveToFile = (userData) => {
   Deno.writeTextFileSync("./user.json", JSON.stringify(userData));
 };
 
+export const createResponse = (body, status = 200) => {
+  const headers = {
+    "content-type": "application/json",
+  };
+
+  return new Response(JSON.stringify(body), { status, headers });
+};
+
 export const createUpdateQuery = (
   criteria,
   updateFields,
