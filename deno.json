@@ -5,6 +5,7 @@
   },
   "imports": {
     "@std/assert": "jsr:@std/assert",
-    "@std/testing": "jsr:@std/testing/bdd"
+    "@std/testing": "jsr:@std/testing/bdd",
+    "@inquirer/prompts": "npm:@inquirer/prompts"
   }
 }
