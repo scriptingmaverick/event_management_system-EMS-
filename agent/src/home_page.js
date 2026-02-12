@@ -1,6 +1,6 @@
 import { select } from "@inquirer/prompts";
 import { green, red } from "jsr:@std/internal@^1.0.12/styles";
-import { sign } from "node:crypto";
+
 
 const BASE_URL = "http://localhost:5050/";
 const { columns: COLUMNS } = Deno.consoleSize();
