@@ -12,7 +12,6 @@ describe("testing update user functionality", () => {
   );
   db.prepare("insert into users(email, username, password) values(?,?,?);")
     .run("hello@gmail.com", "hello", "1234");
-  const { username } = data;
 
   const userDetails = {
     user_id: 1,
