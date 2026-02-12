@@ -40,14 +40,14 @@ describe("testing deleteUser functionality with in-memory DB", () => {
       insertNewUserOn(db, [body.email, body.password, body.username]);
       const response = deleteUser(db, { user_id: 2 });
       assertEquals(response.status, 200);
-      assertEquals(await response.text(), "Account deletion successful");
+      assertEquals((await response.json()).data, "Account deletion successful");
     });
 
     it("testing with non-existing userData", async () => {
       data.user_id = 4;
       const response = deleteUser(db, data);
       assertEquals(response.status, 200);
-      assertEquals(await response.text(), "Account deletion successful");
+      assertEquals((await response.json()).data, "Account deletion successful");
     });
   });
 });

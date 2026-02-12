@@ -29,18 +29,18 @@ describe("testing Login functionality with in-memory DB", () => {
       const body = { email, password };
       const response = login(db, body);
       assertEquals(response.status, 404);
-      assertEquals(await response.text(), "User not found");
+      assertEquals((await response.json()).data, "User not found");
     });
 
     it("testing with existing userData", async () => {
       const response = login(db, data);
-      assertEquals(await response.text(), "User Login successful");
+      assertEquals((await response.json()).data, "User Login successful");
       assertEquals(response.status, 200);
     });
 
     it("testing with existing userData but with wrong password", async () => {
       const response = login(db, { email: data.email, password: "hello" });
-      assertEquals(await response.text(), "Credentials aren't correct");
+      assertEquals((await response.json()).data, "Credentials aren't correct");
       assertEquals(response.status, 400);
     });
   });

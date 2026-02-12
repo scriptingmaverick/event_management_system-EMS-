@@ -1,9 +1,4 @@
-import {
-  createUpdateQuery,
-  saveToFile,
-  sendFailure,
-  sendSuccess,
-} from "../../utils.js";
+import { createResponse, createUpdateQuery, saveToFile } from "../../utils.js";
 
 const selectMatchingUser = (db, userId) =>
   db.prepare(`select * from users where user_id = ?;`).all(userId);
@@ -22,8 +17,9 @@ export const updateUser = (db, body) => {
     db.prepare(query).run(...values);
     const newData = selectMatchingUser(db, user_id)[0];
     saveToFile(newData);
-    return sendSuccess(`updated successfully`, 200);
+
+    return createResponse({ success: true, data: `updated successfully` });
   } catch (e) {
-    return sendFailure(e.message, 501);
+    return createResponse({ success: true, data: e.message }, 501);
   }
 };

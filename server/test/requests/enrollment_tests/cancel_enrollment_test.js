@@ -51,11 +51,11 @@ describe("Cancel enrollment", () => {
     it("1. with valid data", async () => {
       const response = cancelEnrollment(db, data);
       assertEquals(response.status, 200);
-      assertEquals(await response.text(), "Cancelled successfully");
+      assertEquals((await response.json()).data, "Cancelled successfully");
     });
     it("2. with invalid data", () => {
       const response = cancelEnrollment();
-      assertEquals(response.status, 401);
+      assertEquals(response.status, 501);
     });
   });
 });

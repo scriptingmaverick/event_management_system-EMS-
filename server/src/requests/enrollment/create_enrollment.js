@@ -1,8 +1,8 @@
-import { sendFailure, sendSuccess } from "../../utils.js";
+import { createResponse } from "../../utils.js";
 
 export const incrementAttendees = (db, event_id) => {
   db.prepare(`UPDATE events SET attendees = attendees + 1 where event_id = ?`)
-  .run(event_id);
+    .run(event_id);
 };
 
 export const insertNewEnrollment = (db, values) => {
@@ -15,8 +15,11 @@ export const createEnrollment = (db, body) => {
     const values = Object.values(body);
     insertNewEnrollment(db, values);
     incrementAttendees(db, body.event_id);
-    return sendSuccess("Enrolled successfully", 201);
+    return createResponse(
+      { success: true, data: "Enrolled successfully" },
+      201,
+    );
   } catch (e) {
-    return sendFailure(e.message, 401);
+    return createResponse({ success: false, data: e.message }, 401);
   }
 };

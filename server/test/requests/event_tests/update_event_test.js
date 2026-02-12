@@ -47,7 +47,7 @@ describe("testing updateEvent functionality with in-memory DB", () => {
     };
     const response = updateEvent(db, body);
     assertEquals(response.status, 202);
-    assertEquals(await response.text(), "Event details updated");
+    assertEquals((await response.json()).data, "Event details updated");
   });
 
   it("testing with changing only 1-column", async () => {
@@ -56,6 +56,6 @@ describe("testing updateEvent functionality with in-memory DB", () => {
       event_title: "my concert",
     });
     assertEquals(response.status, 202);
-    assertEquals(await response.text(), "Event details updated");
+    assertEquals((await response.json()).data, "Event details updated");
   });
 });

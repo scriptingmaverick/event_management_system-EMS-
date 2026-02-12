@@ -2,7 +2,7 @@ import { beforeAll, describe, it } from "@std/testing";
 import { assertEquals } from "@std/assert";
 import { DatabaseSync } from "node:sqlite";
 import { insertNewUserOn } from "../src/requests/user/create_user.js";
-import { selectMatchingUser, sendFailure, sendSuccess } from "../src/utils.js";
+import { createResponse, selectMatchingUser } from "../src/utils.js";
 
 describe("testing utils", () => {
   let db, data;
@@ -29,40 +29,48 @@ describe("testing utils", () => {
 
     it("testing with existing user", () => {
       const result = selectMatchingUser(db, "hello@gmail.com")[0];
-      assertEquals({email: result.email}, {email:data.email} );
+      assertEquals({ email: result.email }, { email: data.email });
     });
   });
 
   describe("testing response senders", () => {
     describe("testing sendSuccess", () => {
-      it("testing with user given values", () => {
-        const result = sendSuccess("done", 203);
-        const response = new Response("done", { status: 203 });
+      it("testing with user given values", async () => {
+        const result = createResponse({ success: true, data: "done" }, 203);
+        const response = new Response(
+          JSON.stringify({ success: true, data: "done" }),
+          {
+            status: 203,
+          },
+        );
         assertEquals(result.status, response.status);
-        assertEquals(result.text(), response.text());
+        assertEquals(
+          (await result.json()).data,
+          (await response.json()).data,
+        );
       });
 
       it("testing with Default values", () => {
-        const result = sendSuccess();
-        const response = new Response("success", { status: 200 });
+        const result = createResponse();
+        const response = new Response();
         assertEquals(result.status, response.status);
-        assertEquals(result.text(), response.text());
       });
     });
 
     describe("testing sendFailure", () => {
-      it("testing with user given values", () => {
-        const result = sendFailure("not done", 400);
-        const response = new Response("not done", { status: 400 });
+      it("testing with user given values", async () => {
+        const result = createResponse(
+          { success: false, data: "not done" },
+          400,
+        );
+        const response = new Response(
+          JSON.stringify({ success: false, data: "not done" }),
+          {
+            status: 400,
+          },
+        );
         assertEquals(result.status, response.status);
-        assertEquals(result.text(), response.text());
-      });
-
-      it("testing with Default values", () => {
-        const result = sendFailure();
-        const response = new Response("not found", { status: 404 });
-        assertEquals(result.status, response.status);
-        assertEquals(result.text(), response.text());
+        assertEquals((await result.json()).data, (await response.json()).data);
       });
     });
   });

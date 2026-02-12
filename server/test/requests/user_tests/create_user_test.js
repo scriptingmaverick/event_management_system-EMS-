@@ -37,13 +37,13 @@ describe("testing createUser functionality with in-memory DB", () => {
       const body = { email, password, username };
       const response = createUser(db, body);
       assertEquals(response.status, 201);
-      assertEquals(await response.text(), "User created successfully");
+      assertEquals((await response.json()).data, "User created successfully");
     });
 
     it("testing with existing userData", async () => {
       const response = createUser(db, data);
       assertEquals(response.status, 401);
-      assertEquals(await response.text(), "Email already exists");
+      assertEquals((await response.json()).data, "Email already exists");
     });
   });
 });

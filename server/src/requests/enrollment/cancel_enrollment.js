@@ -1,4 +1,4 @@
-import { sendFailure, sendSuccess } from "../../utils.js";
+import { createResponse } from "../../utils.js";
 
 export const decrementAttendees = (db, event_id) => {
   db.prepare(`UPDATE events SET attendees = attendees - 1 where event_id = ?`)
@@ -16,8 +16,9 @@ export const cancelEnrollment = (db, body) => {
     const values = Object.values(body);
     updateEnrollment(db, values);
     decrementAttendees(db, body.event_id);
-    return sendSuccess("Cancelled successfully", 200);
+
+    return createResponse({ success: true, data: "Cancelled successfully" });
   } catch (e) {
-    return sendFailure(e.message, 401);
+    return createResponse({ success: true, data: e.message }, 501);
   }
 };

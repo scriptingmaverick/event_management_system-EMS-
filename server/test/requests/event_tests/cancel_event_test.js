@@ -28,6 +28,6 @@ describe("testing cancelEvent functionality with in-memory DB", () => {
   it("testing with changing status to cancellation", async () => {
     const response = cancelEvent(db, { "event_id": 1 });
     assertEquals(response.status, 200);
-    assertEquals(await response.text(), "Event cancelled");
+    assertEquals((await response.json()).data, "Event cancelled");
   });
 });

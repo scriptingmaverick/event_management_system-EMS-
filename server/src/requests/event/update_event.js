@@ -1,4 +1,4 @@
-import { createUpdateQuery, sendFailure, sendSuccess } from "../../utils.js";
+import { createResponse, createUpdateQuery } from "../../utils.js";
 
 export const updateEvent = (db, body) => {
   const { event_id } = body;
@@ -13,8 +13,11 @@ export const updateEvent = (db, body) => {
 
   try {
     db.prepare(query).run(...values);
-    return sendSuccess("Event details updated", 202);
+    return createResponse(
+      { success: false, data: "Event details updated" },
+      202,
+    );
   } catch (e) {
-    return sendFailure(e.message, 501);
+    return createResponse({ success: false, data: e.message }, 501);
   }
 };

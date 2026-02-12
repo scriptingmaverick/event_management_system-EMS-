@@ -1,4 +1,4 @@
-import { createUpdateQuery, sendFailure, sendSuccess } from "../../utils.js";
+import { createResponse, createUpdateQuery } from "../../utils.js";
 
 export const cancelEvent = (db, body) => {
   const [query, values] = createUpdateQuery(
@@ -10,8 +10,8 @@ export const cancelEvent = (db, body) => {
 
   try {
     db.prepare(query).run(...values);
-    return sendSuccess("Event cancelled", 200);
+    return createResponse({ success: true, data: "Event cancelled" });
   } catch (e) {
-    return sendFailure(e.message, 501);
+    return createResponse({ success: false, data: e.message }, 501);
   }
 };

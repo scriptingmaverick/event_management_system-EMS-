@@ -1,12 +1,6 @@
 export const selectMatchingUser = (db, email) =>
   db.prepare("select * from users where email = ?;").all(email);
 
-export const sendSuccess = (msg = "success", status = 200) =>
-  new Response(msg, { status });
-
-export const sendFailure = (msg = "Not Found", status = 404) =>
-  new Response(msg, { status });
-
 export const saveToFile = (userData) => {
   Deno.writeTextFileSync("./user.json", JSON.stringify(userData));
 };

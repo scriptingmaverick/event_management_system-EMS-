@@ -53,7 +53,7 @@ describe("create event functionality", () => {
       body.shift();
       const response = createEvent(db, body);
       assertEquals(response.status, 200);
-      assertEquals(await response.text(), "Event created");
+      assertEquals((await response.json()).data, "Event created");
     });
   });
 });

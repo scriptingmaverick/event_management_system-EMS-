@@ -51,14 +51,14 @@ describe("Create enrollment", () => {
     it("create enrollment with valid data", async () => {
       db.prepare("delete from enrollments where user_id = 1;").run();
       const response = createEnrollment(db, data);
-      assertEquals(await response.text(), "Enrolled successfully");
+      assertEquals((await response.json()).data, "Enrolled successfully");
       assertEquals(response.status, 201);
     });
 
     it("create enrollment with same user_id and event_id", async () => {
       const response = createEnrollment(db, data);
       assertEquals(
-        await response.text(),
+        (await response.json()).data,
         "UNIQUE constraint failed: enrollments.event_id, enrollments.user_id",
       );
       assertEquals(response.status, 401);
@@ -68,7 +68,7 @@ describe("Create enrollment", () => {
       const response = createEnrollment();
       assertEquals(response.status, 401);
       assertEquals(
-        await response.text(),
+        (await response.json()).data,
         "Cannot convert undefined or null to object",
       );
     });

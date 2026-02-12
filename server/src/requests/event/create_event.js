@@ -1,4 +1,4 @@
-import { sendFailure, sendSuccess } from "../../utils.js";
+import {createResponse } from "../../utils.js";
 
 export const insertNewEventOn = (DB, data) => {
   return DB.prepare(
@@ -11,8 +11,8 @@ export const createEvent = (DB, body) => {
   const data = Object.values(body);
   try {
     insertNewEventOn(DB, data);
-    return sendSuccess("Event created", 200);
+    return createResponse({ success: true, data: "Event created" });
   } catch (e) {
-    return sendFailure(e.message, 501);
+    return createResponse({ success: false, data: e.message }, 501);
   }
 };
