@@ -8,8 +8,7 @@ export const home = async () => {
   if (!response.success) return displayResponse(response);
 
   const events = response.data;
-
-  console.log({ response, events });
+  console.log({ events, response });
 };
 
 home();
