@@ -1,5 +1,6 @@
 import { createUser } from "./user/create_user.js";
 import { deleteUser } from "./user/delete_user.js";
+import { changeUserStatus } from "./user/purchase_premium.js";
 import { login } from "./user/login_user.js";
 import { updateUser } from "./user/update_user.js";
 import { createEvent } from "./event/create_event.js";
@@ -8,6 +9,10 @@ import { cancelEvent } from "./event/cancel_event.js";
 import { DatabaseSync } from "node:sqlite";
 import { createEnrollment } from "./enrollment/create_enrollment.js";
 import { cancelEnrollment } from "./enrollment/cancel_enrollment.js";
+import { getEventTypes } from "./get_requests/get_event_types.js";
+import { getEventsByType } from "./get_requests/get_events.js";
+import { getCreatedEvents } from "./get_requests/get_event_creations.js";
+import { getSubscribedEvents } from "./get_requests/get_user_enrollments.js";
 
 export const createBody = async (method, request) => {
   if (method === "POST") {
@@ -89,6 +94,11 @@ export const requestHandler = async (request) => {
     "/cancel-event": cancelEvent,
     "/enroll": createEnrollment,
     "/cancel-enrollment": cancelEnrollment,
+    "/get-event": getEventTypes,
+    "/get-event-type": getEventsByType,
+    "/get-creations": getCreatedEvents,
+    "/get-subscriptions": getSubscribedEvents,
+    "/purchase-premium": changeUserStatus,
   };
 
   return apisToFns[path](db, body);

@@ -1,6 +1,6 @@
 import { createResponse } from "../../utils.js";
 
-export const getEventsByUser = (db, userData) => {
+export const getCreatedEvents = (db, userData) => {
   try {
     const query = `SELECT * FROM events WHERE user_id = ?;`;
     const result = db.prepare(query).all(userData.user_id);
