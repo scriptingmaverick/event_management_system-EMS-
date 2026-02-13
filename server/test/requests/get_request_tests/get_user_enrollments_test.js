@@ -1,7 +1,7 @@
 import { assertEquals } from "@std/assert";
 import { describe, it } from "@std/testing";
 import { DatabaseSync } from "node:sqlite";
-import { getEventByUserEnrollments } from "../../../src/requests/get_requests/get_user_enrollments.js";
+import { getSubscribedEvents } from "../../../src/requests/get_requests/get_user_enrollments.js";
 
 describe("get user enrollments", () => {
   const db = new DatabaseSync(":memory:");
@@ -43,12 +43,12 @@ describe("get user enrollments", () => {
   const userData = { user_id: 1 };
   describe("get event enrolled by user", () => {
     it("1. get event enrolled by user ", () => {
-      const response = getEventByUserEnrollments(db, userData);
-      assertEquals(response.status, 200)
+      const response = getSubscribedEvents(db, userData);
+      assertEquals(response.status, 200);
     });
     it("2. with invalid data", () => {
-      const response = getEventByUserEnrollments(db);
-      assertEquals(response.status, 501)
-    })
+      const response = getSubscribedEvents(db);
+      assertEquals(response.status, 501);
+    });
   });
 });

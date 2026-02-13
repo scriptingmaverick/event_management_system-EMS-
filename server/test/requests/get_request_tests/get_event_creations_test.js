@@ -1,6 +1,6 @@
 import { assertEquals } from "@std/assert";
 import { describe, it } from "@std/testing";
-import { getEventsByUser } from "../../../src/requests/get_requests/get_event_creations.js";
+import { getCreatedEvents } from "../../../src/requests/get_requests/get_event_creations.js";
 import { DatabaseSync } from "node:sqlite";
 
 describe("Get events created by user", () => {
@@ -18,7 +18,7 @@ describe("Get events created by user", () => {
 
   describe("get event by user", () => {
     it("1. should all the event top related to the specific user", async () => {
-      const response = getEventsByUser(db, data);
+      const response = getCreatedEvents(db, data);
       const body = await response.json();
       assertEquals(body.success, true);
       assertEquals(body.data, [{
@@ -29,12 +29,12 @@ describe("Get events created by user", () => {
     });
 
     it("2. When db is undefined", async () => {
-      const response = await getEventsByUser("_", data).json();
+      const response = await getCreatedEvents("_", data).json();
       assertEquals(response.success, false);
     });
 
     it("3. when data is undefined", async () => {
-      const response = await getEventsByUser(db).json();
+      const response = await getCreatedEvents(db).json();
       assertEquals(response.success, false);
     });
   });
