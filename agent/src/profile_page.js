@@ -1,5 +1,5 @@
 import { checkbox, select } from "@inquirer/prompts";
-import { BASE_URL } from "./utils.js";
+import { BASE_URL, displayHeaders, displayResponse } from "./utils.js";
 
 const userData = JSON.parse(Deno.readTextFileSync("./user.json"));
 
@@ -32,10 +32,12 @@ const update = async () => {
     headers: { "content-type": "application/json" },
     body: JSON.stringify(requestBody),
   });
-  console.log(await response.text());
+  displayResponse(await response.json());
 };
 
-const userSubscription = () => {};
+const userSubscriptions = () => {
+};
+
 const createdEvents = () => {};
 
 const profileOPtions = async (userData) => {
@@ -43,7 +45,7 @@ const profileOPtions = async (userData) => {
     message: "SELECT option",
     choices: [
       { name: "UPDATE PROFILE", value: update },
-      { name: "SEE SUBSCRIPTIONS", value: userSubscription },
+      { name: "SEE SUBSCRIPTIONS", value: userSubscriptions },
       { name: "SEE CREATED EVENTS", value: createdEvents },
     ],
   });
