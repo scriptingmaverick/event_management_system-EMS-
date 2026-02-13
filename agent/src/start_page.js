@@ -1,5 +1,4 @@
 import { select } from "@inquirer/prompts";
-import { green, red } from "jsr:@std/internal@^1.0.12/styles";
 import { BASE_URL, displayHeaders, displayResponse } from "./utils.js";
 
 
