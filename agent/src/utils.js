@@ -1,6 +1,6 @@
 import { green, red } from "jsr:@std/internal@^1.0.12/styles";
 
-export const BASE_URL = "http://localhost:5050/";
+export const BASE_URL = "http://localhost:5050";
 export const { columns: COLUMNS } = Deno.consoleSize();
 
 export const sleep = (ms) => new Promise((res) => setTimeout(res, ms));

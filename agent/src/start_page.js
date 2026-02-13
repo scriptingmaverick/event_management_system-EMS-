@@ -11,7 +11,7 @@ const login = async () => {
   const requestBody = JSON.stringify({ email, password });
 
   const request = { method: "POST", headers, body: requestBody };
-  const res = await fetch(`${BASE_URL}login`, request);
+  const res = await fetch(`${BASE_URL}/login`, request);
 
   return await res.json();
 };
@@ -27,7 +27,7 @@ const signup = async () => {
   const requestBody = JSON.stringify({ username, email, password });
 
   const request = { method: "POST", headers, body: requestBody };
-  const res = await fetch(`${BASE_URL}sign-up`, request);
+  const res = await fetch(`${BASE_URL}/sign-up`, request);
 
   return await res.json();
 };
