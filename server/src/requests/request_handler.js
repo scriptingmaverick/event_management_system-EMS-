@@ -14,13 +14,17 @@ import { getEventsByType } from "./get_requests/get_events.js";
 import { getCreatedEvents } from "./get_requests/get_event_creations.js";
 import { getSubscribedEvents } from "./get_requests/get_user_enrollments.js";
 
-export const createBody = async (method, request) => {
-  if (method === "POST") {
-    const contentType = request.headers.get("content-type");
-    return await getBody(request, contentType);
+export const parseSearchParams = (request) => {
+  const requestPath = request.url;
+  const searchParams = requestPath.slice(requestPath.indexOf("?"));
+  const params = new URLSearchParams(searchParams);
+
+  const body = {};
+  for (const [key, value] of params) {
+    body[key] = value;
   }
 
-  return "";
+  return body;
 };
 
 export const getBody = (request, contentType) =>
@@ -32,6 +36,16 @@ export const parse = async (request) => {
   const body = await createBody(method, request);
 
   return { body, baseUrl, path, method };
+};
+
+export const createBody = async (method, request) => {
+  if (method === "POST") {
+    const contentType = request.headers.get("content-type");
+    return await getBody(request, contentType);
+  }
+
+  const body = parseSearchParams(request);
+  return body;
 };
 
 const createTables = (db) => {
