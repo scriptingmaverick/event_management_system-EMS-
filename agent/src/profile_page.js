@@ -1,5 +1,5 @@
 import { checkbox, select } from "@inquirer/prompts";
-import { BASE_URL, displayHeaders, displayResponse } from "./utils.js";
+import { BASE_URL, displayResponse } from "./utils.js";
 
 const userData = JSON.parse(Deno.readTextFileSync("./user.json"));
 
@@ -35,7 +35,11 @@ const update = async () => {
   displayResponse(await response.json());
 };
 
-const userSubscriptions = () => {
+const userSubscriptions = async () => {
+  const response = await fetch(
+    `${BASE_URL}/get-subscriptions?user_id=${userData.user_id}`,
+  );
+  console.log(await response.json());
 };
 
 const createdEvents = () => {};
