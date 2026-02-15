@@ -25,3 +25,22 @@ export const displayResponse = async ({ data, success }) => {
   console.log(formatResponse(data, success));
   await sleep(1500);
 };
+
+export const display = ({
+  event_title,
+  description,
+  type,
+  location,
+  entry_fee,
+  attendees,
+  event_date,
+}) =>
+  console.table({
+    event_title,
+    description,
+    type,
+    location,
+    entry_fee,
+    attendees,
+    event_date,
+  });
