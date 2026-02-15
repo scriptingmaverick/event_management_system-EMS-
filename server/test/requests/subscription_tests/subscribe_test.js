@@ -2,15 +2,15 @@ import { assertEquals } from "@std/assert";
 import { describe, it } from "@std/testing";
 import { DatabaseSync } from "node:sqlite";
 import {
-  createEnrollment,
+  subscribe,
   insertNewEnrollment,
-} from "../../../src/requests/enrollment/create_enrollment.js";
+} from "../../../src/requests/subscription_handler/subscribe.js";
 
 describe("Create enrollment", () => {
   const db = new DatabaseSync(":memory:");
   const data = {
-    "event_id": 1,
-    "user_id": 1,
+    event_id: 1,
+    user_id: 1,
   };
   db.exec(`CREATE TABLE IF NOT EXISTS enrollments(
     event_id INTEGER,
@@ -50,13 +50,13 @@ describe("Create enrollment", () => {
   describe("create enrollment", () => {
     it("create enrollment with valid data", async () => {
       db.prepare("delete from enrollments where user_id = 1;").run();
-      const response = createEnrollment(db, data);
-      assertEquals((await response.json()).data, "Enrolled successfully");
+      const response = subscribe(db, data);
+      assertEquals((await response.json()).data, "subscribed");
       assertEquals(response.status, 201);
     });
 
     it("create enrollment with same user_id and event_id", async () => {
-      const response = createEnrollment(db, data);
+      const response = subscribe(db, data);
       assertEquals(
         (await response.json()).data,
         "UNIQUE constraint failed: enrollments.event_id, enrollments.user_id",
@@ -65,7 +65,7 @@ describe("Create enrollment", () => {
     });
 
     it("with invalid data", async () => {
-      const response = createEnrollment();
+      const response = subscribe();
       assertEquals(response.status, 401);
       assertEquals(
         (await response.json()).data,

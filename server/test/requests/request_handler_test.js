@@ -5,13 +5,13 @@ import { parse } from "../../src/requests/request_handler.js";
 describe("testing parser", () => {
   it("testing with invalid request", () => {
     assertRejects(async () => await parse("hello"));
-  })
+  });
   describe("testing with GET method", () => {
     it("testing with valid request", async () => {
       const request = new Request("http://localhost:8080");
       const result = await parse(request);
       assertEquals(result.method, "GET");
-      assertEquals(result.body, "");
+      assertEquals(result.body, {'/':""});
       assertEquals(result.baseUrl, "http://localhost:8080");
       assertEquals(result.path, "/");
     });
@@ -29,7 +29,7 @@ describe("testing parser", () => {
 
       const result = await parse(request);
       assertEquals(result.method, "POST");
-      assertEquals(result.body, { "name": "hi" });
+      assertEquals(result.body, { name: "hi" });
       assertEquals(result.baseUrl, "http://localhost:8080");
       assertEquals(result.path, "/create");
     });

@@ -2,9 +2,9 @@ import { assertEquals } from "@std/assert";
 import { describe, it } from "@std/testing";
 import { DatabaseSync } from "node:sqlite";
 import {
-  cancelEnrollment,
+  unsubscribe,
   updateEnrollment,
-} from "../../../src/requests/enrollment/cancel_enrollment.js";
+} from "../../../src/requests/subscription_handler/unsubscribe.js";
 
 describe("Cancel enrollment", () => {
   const db = new DatabaseSync(":memory:");
@@ -35,8 +35,10 @@ describe("Cancel enrollment", () => {
 
   db.prepare(`INSERT into events (event_id) values(?)`).run(1);
   db.prepare(`INSERT into users (user_id) values(?)`).run(1);
-  db.prepare(`INSERT into enrollments (event_id, user_id) values(?,?)`)
-    .run(1, 1);
+  db.prepare(`INSERT into enrollments (event_id, user_id) values(?,?)`).run(
+    1,
+    1,
+  );
 
   describe("update status in enrollments", () => {
     it("1. cancel with valid data", () => {
@@ -49,12 +51,12 @@ describe("Cancel enrollment", () => {
 
   describe("cancel enrollment", () => {
     it("1. with valid data", async () => {
-      const response = cancelEnrollment(db, data);
+      const response = unsubscribe(db, data);
       assertEquals(response.status, 200);
       assertEquals((await response.json()).data, "Cancelled successfully");
     });
     it("2. with invalid data", () => {
-      const response = cancelEnrollment();
+      const response = unsubscribe();
       assertEquals(response.status, 501);
     });
   });

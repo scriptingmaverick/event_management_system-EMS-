@@ -7,8 +7,8 @@ import { createEvent } from "./event/create_event.js";
 import { updateEvent } from "./event/update_event.js";
 import { cancelEvent } from "./event/cancel_event.js";
 import { DatabaseSync } from "node:sqlite";
-import { createEnrollment } from "./enrollment/create_enrollment.js";
-import { cancelEnrollment } from "./enrollment/cancel_enrollment.js";
+import { subscribe } from "./subscription_handler/subscribe.js";
+import { unsubscribe } from "./subscription_handler/unsubscribe.js";
 import { getEventTypes } from "./get_requests/get_event_types.js";
 import { getEventsByType } from "./get_requests/get_events.js";
 import { getCreatedEvents } from "./get_requests/get_event_creations.js";
@@ -106,8 +106,8 @@ export const requestHandler = async (request) => {
     "/create-event": createEvent,
     "/update-event": updateEvent,
     "/cancel-event": cancelEvent,
-    "/enroll": createEnrollment,
-    "/cancel-enrollment": cancelEnrollment,
+    "/subscribe": subscribe,
+    "/cancel-subscription": unsubscribe,
     "/get-event-types": getEventTypes,
     "/get-events": getEventsByType,
     "/get-creations": getCreatedEvents,

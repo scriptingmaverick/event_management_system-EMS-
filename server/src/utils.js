@@ -2,7 +2,7 @@ export const selectMatchingUser = (db, email) =>
   db.prepare("select * from users where email = ?;").all(email);
 
 export const saveToFile = (userData) => {
-  Deno.writeTextFileSync("./user.json", JSON.stringify(userData));
+  Deno.writeTextFileSync("../user.json", JSON.stringify(userData));
 };
 
 export const createResponse = (body, status = 200) => {
