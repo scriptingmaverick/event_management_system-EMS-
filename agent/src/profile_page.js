@@ -39,16 +39,30 @@ const update = async () => {
 const formatSubscribedEvents = (events) => {
   console.log(events);
   return events.map(
-    ({ event_id, event_title, status, event_date, location }) => {
-      return { event_id, event_title, status, event_date, location };
+    (
+      {
+        event_id,
+        event_title,
+        status,
+        event_date,
+        location,
+        enrollment_status,
+      },
+    ) => {
+      return {
+        event_id,
+        event_title,
+        event_status: status,
+        enrollment_status,
+        event_date,
+        location,
+      };
     },
   );
 };
 
-const displaySubscribedEvents = (subscribedEvents) => {
-  console.table(
-    subscribedEvents.map(({ event_id, ...eventData }) => eventData),
-  );
+const displayEvents = (events) => {
+  console.table(events.map(({ event_id, ...eventData }) => eventData));
 };
 
 const requestUnsubscribeFromEvent = async (event_id, user_id) => {
@@ -61,14 +75,27 @@ const requestUnsubscribeFromEvent = async (event_id, user_id) => {
   console.log(await response.text());
 };
 
+const getChoices = (events) => {
+  const choices = events.map((event) => ({
+    name: event.event_title,
+    value: event,
+  }));
+  return choices;
+};
 const unsubscribeEvent = async (subscribedEvents) => {
+  const choices = getChoices(subscribedEvents);
+  if (choices.length === 0) {
+    console.log("No events found");
+    return;
+  }
+  choices.push({ name: "Back", value: 0 });
   const selectedEvent = await select({
     message: "SELECT EVENT YOU WANT TO UNSUBSCRIBE",
-    choices: subscribedEvents.map((event) => ({
-      name: event.event_title,
-      value: event,
-    })),
+    choices: choices,
   });
+  if (selectedEvent === 0) {
+    return;
+  }
   requestUnsubscribeFromEvent(selectedEvent.event_id, userData.user_id);
 };
 
@@ -77,8 +104,12 @@ const showSubscriptionActions = async (subscribedEvents) => {
     message: "SELECT OPERATION",
     choices: [
       { name: "unsubscribe to an event", value: unsubscribeEvent },
+      { name: "BACK", value: 0 },
     ],
   });
+  if (option === 0) {
+    return;
+  }
   await option(subscribedEvents);
 };
 
@@ -88,22 +119,86 @@ const userSubscriptions = async () => {
   );
   const events = (await response.json()).data;
   const subscribedEvents = formatSubscribedEvents(events);
-  displaySubscribedEvents(subscribedEvents);
-  showSubscriptionActions(subscribedEvents);
+  displayEvents(subscribedEvents);
+  await showSubscriptionActions(subscribedEvents);
 };
 
-const createdEvents = () => {};
+const requestCancelEvent = async (event_id) => {
+  const requestBody = JSON.stringify({ event_id });
+  const response = await fetch(`${BASE_URL}/cancel-event`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: requestBody,
+  });
+  console.log(await response.text());
+};
 
-const profileOPtions = async (userData) => {
+const cancelEvent = async (createdEvents) => {
+  const choices = getChoices(createdEvents);
+  if (choices.length === 0) {
+    console.log("No events found");
+    return;
+  }
+  console.log({ choices });
+  choices.push({ name: "Back", value: 0 });
+  const selectedEvent = await select({
+    message: "SELECT EVENT YOU WANT TO CANCEl",
+    choices: choices,
+  });
+  if (selectedEvent === 0) {
+    return;
+  }
+  await requestCancelEvent(selectedEvent.event_id);
+};
+
+const showCreationActions = async (createdEvents) => {
   const option = await select({
-    message: "SELECT option",
+    message: "SELECT OPERATION",
     choices: [
-      { name: "UPDATE PROFILE", value: update },
-      { name: "SEE SUBSCRIPTIONS", value: userSubscriptions },
-      { name: "SEE CREATED EVENTS", value: createdEvents },
+      { name: "cancel event", value: cancelEvent },
+      { name: "Back", value: 0 },
     ],
   });
-  await option(userData);
+  if (option === 0) {
+    return;
+  }
+  return await cancelEvent(createdEvents);
 };
 
-profileOPtions(userData);
+const formatCreatedEvents = (createdEvents) => {
+  return createdEvents.map(
+    ({ event_id, event_title, status, location, event_date }) => {
+      return { event_id, event_title, status, location, event_date };
+    },
+  );
+};
+
+const createdEvents = async () => {
+  const response = await fetch(
+    `${BASE_URL}/get-creations?user_id=${userData.user_id}`,
+  );
+  const events = (await response.json()).data;
+  const formattedEvents = formatCreatedEvents(events);
+  displayEvents(formattedEvents);
+  await showCreationActions(formattedEvents);
+};
+
+const profileOPtions = async (userData) => {
+  while (true) {
+    const option = await select({
+      message: "SELECT option",
+      choices: [
+        { name: "UPDATE PROFILE", value: update },
+        { name: "SEE SUBSCRIPTIONS", value: userSubscriptions },
+        { name: "SEE CREATED EVENTS", value: createdEvents },
+        { name: "BACK", value: 0 },
+      ],
+    });
+    if (option === 0) {
+      return;
+    }
+    await option(userData);
+  }
+};
+
+await profileOPtions(userData);
