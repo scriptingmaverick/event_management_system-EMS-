@@ -1,5 +1,5 @@
 import { select } from "@inquirer/prompts";
-import { BASE_URL, displayResponse } from "./utils.js";
+import { BASE_URL, displayResponse, getCurrentUser } from "./utils.js";
 
 export const createChoices = (data) => {
   const choices = [
@@ -48,9 +48,7 @@ export const handleEventSelection = async (data) => {
 };
 
 export const subscribe = async ({ event_id }) => {
-  const { user_id } = await Deno.readTextFile("./user.json").then((x) =>
-    JSON.parse(x)
-  );
+  const { user_id } = await getCurrentUser();
 
   const response = await fetch(BASE_URL + "/subscribe", {
     method: "POST",
@@ -94,7 +92,7 @@ export const displayEvents = async (eventType) => {
 
 export const homePage = async () => {
   const response = await fetch(`${BASE_URL}/get-event-types`).then((x) =>
-    x.json()
+    x.json(),
   );
 
   if (!response.success) return displayResponse(response);
