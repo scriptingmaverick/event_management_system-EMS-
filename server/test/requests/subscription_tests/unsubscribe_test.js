@@ -16,7 +16,7 @@ describe("Cancel enrollment", () => {
   db.exec(`CREATE TABLE IF NOT EXISTS enrollments(
     event_id INTEGER,
     user_id INTEGER,
-    status TEXT DEFAULT('confirmed'),
+    enrollment_status TEXT DEFAULT('confirmed'),
     created_at TEXT DEFAULT(DATETIME('now','localtime')),
 
     PRIMARY KEY(event_id, user_id),
@@ -40,12 +40,12 @@ describe("Cancel enrollment", () => {
     1,
   );
 
-  describe("update status in enrollments", () => {
+  describe("update enrollment_status in enrollments", () => {
     it("1. cancel with valid data", () => {
       const values = Object.values(data);
       updateEnrollment(db, values);
       const dataInDb = db.prepare(`SELECT * FROM enrollments`).all();
-      assertEquals(dataInDb[0].status, "cancelled");
+      assertEquals(dataInDb[0]["enrollment_status"], "cancelled");
     });
   });
 

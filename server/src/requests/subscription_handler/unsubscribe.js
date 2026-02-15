@@ -9,7 +9,7 @@ export const decrementAttendees = (db, event_id) => {
 export const updateEnrollment = (db, lookUpValues) => {
   return db
     .prepare(
-      `UPDATE enrollments SET status = 'cancelled' where event_id = ? and user_id = ?`,
+      `UPDATE enrollments SET enrollment_status = 'cancelled' where event_id = ? and user_id = ?`,
     )
     .run(...lookUpValues);
 };

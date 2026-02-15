@@ -80,7 +80,7 @@ const createTables = (db) => {
     CREATE TABLE IF NOT EXISTS enrollments(
     event_id INTEGER,
     user_id INTEGER,
-    status TEXT DEFAULT('confirmed'),
+    enrollment_status TEXT DEFAULT('confirmed'),
     enrolled_at TEXT DEFAULT(DATETIME('now','localtime')),
 
     PRIMARY KEY(event_id, user_id),

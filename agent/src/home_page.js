@@ -2,16 +2,17 @@ import { select } from "@inquirer/prompts";
 import { BASE_URL, displayResponse } from "./utils.js";
 
 export const createChoices = (data) => {
-  const choices = data.map(({ event_title, type, event_date, event_id }) => ({
-    name: `${event_title}\t\t${type}\t\t${event_date}`,
-    value: event_id,
-  }));
-
-  choices.unshift({
-    name: "event_title\t\ttype\t\tevent_date",
-    value: null,
-    disabled: true,
-  });
+  const choices = [
+    {
+      name: "event_title\t\ttype\t\tevent_date",
+      value: null,
+      disabled: true,
+    },
+    ...data.map(({ event_title, type, event_date, event_id }) => ({
+      name: `${event_title}\t\t${type}\t\t${event_date}`,
+      value: event_id,
+    })),
+  ];
 
   return choices;
 };
@@ -47,8 +48,8 @@ export const handleEventSelection = async (data) => {
 };
 
 export const subscribe = async ({ event_id }) => {
-  const { user_id } = await Deno.readTextFile("../../user.json").then((x) =>
-    JSON.parse(x),
+  const { user_id } = await Deno.readTextFile("./user.json").then((x) =>
+    JSON.parse(x)
   );
 
   const response = await fetch(BASE_URL + "/subscribe", {
@@ -93,7 +94,7 @@ export const displayEvents = async (eventType) => {
 
 export const homePage = async () => {
   const response = await fetch(`${BASE_URL}/get-event-types`).then((x) =>
-    x.json(),
+    x.json()
   );
 
   if (!response.success) return displayResponse(response);
