@@ -1,14 +1,14 @@
-import { select } from "@inquirer/prompts";
+import { input, password, select } from "@inquirer/prompts";
 import { BASE_URL, displayHeaders, displayResponse } from "./utils.js";
-
+import { homePage } from "./home_page.js";
 
 const login = async () => {
   displayHeaders("LOGIN");
-  const email = prompt("Enter email: ");
-  const password = prompt("Enter password: ");
+  const email = await input({ message: "Enter email: " });
+  const user_password = await password({ message: "Enter password: " });
 
   const headers = { "content-type": "application/json" };
-  const requestBody = JSON.stringify({ email, password });
+  const requestBody = JSON.stringify({ email, password: user_password });
 
   const request = { method: "POST", headers, body: requestBody };
   const res = await fetch(`${BASE_URL}/login`, request);
@@ -19,12 +19,16 @@ const login = async () => {
 const signup = async () => {
   displayHeaders("SIGN UP");
 
-  const username = prompt("Enter username: ");
-  const email = prompt("Enter email: ");
-  const password = prompt("Enter password: ");
+  const username = await input({ message: "Enter username: " });
+  const email = await input({ message: "Enter email: " });
+  const user_password = await password({ message: "Enter password: " });
 
   const headers = { "content-type": "application/json" };
-  const requestBody = JSON.stringify({ username, email, password });
+  const requestBody = JSON.stringify({
+    username,
+    email,
+    password: user_password,
+  });
 
   const request = { method: "POST", headers, body: requestBody };
   const res = await fetch(`${BASE_URL}/sign-up`, request);
@@ -42,10 +46,10 @@ const routeOperation = async (option, response) => {
   if (loginResponse.success) return loginResponse;
 
   await displayResponse(loginResponse);
-  return mainPage();
 };
 
-const mainPage = async () => {
+export const mainPage = async () => {
+  console.clear();
   while (true) {
     console.clear();
     const mode = await select({
@@ -59,12 +63,9 @@ const mainPage = async () => {
 
     const response = await mode();
     await displayResponse(response);
-    return await routeOperation(mode, response);
+    await routeOperation(mode, response);
+    await homePage();
   }
 };
 
-const main = async () => {
-  console.log(await mainPage());
-};
-
-main();
+mainPage();

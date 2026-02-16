@@ -114,6 +114,7 @@ export const requestHandler = async (request) => {
     "/get-subscriptions": getSubscribedEvents,
     "/purchase-premium": changeUserStatus,
   };
+  console.log(path);
 
   return apisToFns[path](db, body);
 };

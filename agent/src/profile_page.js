@@ -1,6 +1,7 @@
 // deno-lint-ignore-file no-unused-vars
 import { checkbox, select } from "@inquirer/prompts";
 import { BASE_URL, displayResponse } from "./utils.js";
+import { homePage } from "./home_page.js";
 
 const userData = JSON.parse(Deno.readTextFileSync("./user.json"));
 
@@ -183,7 +184,9 @@ const createdEvents = async () => {
   await showCreationActions(formattedEvents);
 };
 
-const profileOPtions = async (userData) => {
+export const profileOptions = async (userData) => {
+  console.clear();
+
   while (true) {
     const option = await select({
       message: "SELECT option",
@@ -194,11 +197,11 @@ const profileOPtions = async (userData) => {
         { name: "BACK", value: 0 },
       ],
     });
+
+    console.clear();
     if (option === 0) {
       return;
     }
     await option(userData);
   }
 };
-
-await profileOPtions(userData);
