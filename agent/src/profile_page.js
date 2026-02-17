@@ -3,6 +3,7 @@ import { checkbox, select } from "@inquirer/prompts";
 import { BASE_URL, displayResponse } from "./utils.js";
 import { homePage } from "./home_page.js";
 import { userSubscriptions } from "./subscription_manager.js";
+import { createdEvents } from "./creation_manager.js";
 
 export const userData = JSON.parse(Deno.readTextFileSync("./user.json"));
 
@@ -35,7 +36,7 @@ const update = async () => {
     headers: { "content-type": "application/json" },
     body: JSON.stringify(requestBody),
   });
-  displayResponse(await response.json());
+  await displayResponse(await response.json());
 };
 
 
@@ -50,66 +51,6 @@ export const getChoices = (events) => {
     value: event,
   }));
   return choices;
-};
-
-const requestCancelEvent = async (event_id) => {
-  const requestBody = JSON.stringify({ event_id });
-  const response = await fetch(`${BASE_URL}/cancel-event`, {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: requestBody,
-  });
-  console.log(await response.text());
-};
-
-const cancelEvent = async (createdEvents) => {
-  const choices = getChoices(createdEvents);
-  if (choices.length === 0) {
-    console.log("No events found");
-    return;
-  }
-  console.log({ choices });
-  choices.push({ name: "Back", value: 0 });
-  const selectedEvent = await select({
-    message: "SELECT EVENT YOU WANT TO CANCEl",
-    choices: choices,
-  });
-  if (selectedEvent === 0) {
-    return;
-  }
-  await requestCancelEvent(selectedEvent.event_id);
-};
-
-const showCreationActions = async (createdEvents) => {
-  const option = await select({
-    message: "SELECT OPERATION",
-    choices: [
-      { name: "cancel event", value: cancelEvent },
-      { name: "Back", value: 0 },
-    ],
-  });
-  if (option === 0) {
-    return;
-  }
-  return await cancelEvent(createdEvents);
-};
-
-const formatCreatedEvents = (createdEvents) => {
-  return createdEvents.map(
-    ({ event_id, event_title, status, location, event_date }) => {
-      return { event_id, event_title, status, location, event_date };
-    },
-  );
-};
-
-const createdEvents = async () => {
-  const response = await fetch(
-    `${BASE_URL}/get-creations?user_id=${userData.user_id}`,
-  );
-  const events = (await response.json()).data;
-  const formattedEvents = formatCreatedEvents(events);
-  displayEvents(formattedEvents);
-  await showCreationActions(formattedEvents);
 };
 
 export const profileOptions = async (userData) => {

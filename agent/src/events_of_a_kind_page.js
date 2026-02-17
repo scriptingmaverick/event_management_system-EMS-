@@ -5,7 +5,7 @@ export const handleSelectedEventType = async (eventType) => {
   const url = `${BASE_URL}/get-events?type=${eventType}`;
   const { data, success } = await fetch(url).then((x) => x.json());
 
-  if (!success) return displayResponse({ data, success });
+  if (!success) return await displayResponse({ data, success });
 
   return await handleEventSelection(data);
 };

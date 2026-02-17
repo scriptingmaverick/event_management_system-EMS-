@@ -18,12 +18,18 @@ export const displayHeaders = (msg) => {
   console.log(formatHeaders(msg));
 };
 
-export const formatResponse = (msg, success) =>
-  success ? green(msg) : red(msg);
+export const formatResponse = (msg, success) => success ? green(msg) : red(msg);
 
-export const displayResponse = async ({ data, success }) => {
+export const displayResponse = async (response) => {
+  if (!response) {
+    await sleep(1500);
+    console.clear();
+    return;
+  }
+  const { data, success } = response;
   console.log(formatResponse(data, success));
   await sleep(1500);
+  console.clear();
 };
 
 export const display = ({

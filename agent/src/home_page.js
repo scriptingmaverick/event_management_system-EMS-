@@ -24,7 +24,7 @@ export const homePage = async () => {
       x.json()
     );
 
-    if (!response.success) return displayResponse(response);
+    if (!response.success) return await displayResponse(response);
     const choices = formatChoices(response);
 
     const eventType = await select({

@@ -32,7 +32,7 @@ export const eventCreationPage = async () => {
     },
   }).then((x) => x.json());
 
-  displayResponse(response);
+  await displayResponse(response);
 };
 
 eventCreationPage();

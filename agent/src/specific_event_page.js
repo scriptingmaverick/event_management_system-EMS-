@@ -41,7 +41,7 @@ export const subscribe = async ({ event_id }) => {
     headers: { "content-type": "application/json" },
   }).then((x) => x.json());
 
-  displayResponse(response);
+  await displayResponse(response);
 
   if (!response.success) return;
 
