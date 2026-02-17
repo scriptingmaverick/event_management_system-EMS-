@@ -58,7 +58,11 @@ const showSubscriptionActions = async (subscribedEvents) => {
   const option = await select({
     message: "SELECT OPERATION",
     choices: [
-      { name: "unsubscribe to an event", value: unsubscribeEvent },
+      {
+        name: "unsubscribe to an event",
+        value: unsubscribeEvent,
+        disabled: subscribedEvents.length === 0,
+      },
       { name: "BACK", value: 0 },
     ],
   });

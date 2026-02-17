@@ -2,7 +2,7 @@ import { createResponse } from "../../utils.js";
 
 export const getCreatedEvents = (db, userData) => {
   try {
-    const query = `SELECT * FROM events WHERE user_id = ?;`;
+    const query = `SELECT * FROM events WHERE user_id = ? and status = 'confirmed';`;
     const result = db.prepare(query).all(userData.user_id);
     return createResponse({ success: true, data: result });
   } catch (e) {
