@@ -1,6 +1,6 @@
 import { select } from "@inquirer/prompts";
 import { displayEvents, getChoices, userData } from "./profile_page.js";
-import { BASE_URL } from "./utils.js";
+import { BASE_URL, displayResponse } from "./utils.js";
 
 const requestUnsubscribeFromEvent = async (event_id, user_id) => {
   const requestBody = JSON.stringify({ event_id, user_id });
@@ -9,11 +9,10 @@ const requestUnsubscribeFromEvent = async (event_id, user_id) => {
     headers: { "content-type": "application/json" },
     body: requestBody,
   });
-  console.log(await response.text());
+  return JSON.parse(await response.text());
 };
 
 const formatSubscribedEvents = (events) => {
-  console.log(events);
   return events.map(
     (
       {
@@ -40,8 +39,7 @@ const formatSubscribedEvents = (events) => {
 const unsubscribeEvent = async (subscribedEvents) => {
   const choices = getChoices(subscribedEvents);
   if (choices.length === 0) {
-    console.log("No events found");
-    return;
+    return { success: false, data: "No events found" };
   }
   choices.push({ name: "Back", value: 0 });
   const selectedEvent = await select({
@@ -51,7 +49,10 @@ const unsubscribeEvent = async (subscribedEvents) => {
   if (selectedEvent === 0) {
     return;
   }
-  requestUnsubscribeFromEvent(selectedEvent.event_id, userData.user_id);
+  return await requestUnsubscribeFromEvent(
+    selectedEvent.event_id,
+    userData.user_id,
+  );
 };
 
 const showSubscriptionActions = async (subscribedEvents) => {
@@ -69,15 +70,16 @@ const showSubscriptionActions = async (subscribedEvents) => {
   if (option === 0) {
     return;
   }
-  await option(subscribedEvents);
+  return await option(subscribedEvents);
 };
 
 export const userSubscriptions = async () => {
-  const response = await fetch(
+  const data = await fetch(
     `${BASE_URL}/get-subscriptions?user_id=${userData.user_id}`,
   );
-  const events = (await response.json()).data;
+  const events = (await data.json()).data;
   const subscribedEvents = formatSubscribedEvents(events);
   displayEvents(subscribedEvents);
-  await showSubscriptionActions(subscribedEvents);
+  const response = await showSubscriptionActions(subscribedEvents);
+  await displayResponse(response);
 };

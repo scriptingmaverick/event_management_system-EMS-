@@ -3,7 +3,7 @@ import { checkbox, select } from "@inquirer/prompts";
 import { BASE_URL, displayResponse } from "./utils.js";
 import { homePage } from "./home_page.js";
 import { userSubscriptions } from "./subscription_manager.js";
-import { createdEvents } from "./creation_manager.js";
+import { createdEvents } from "./manage_created_events.js";
 
 export const userData = JSON.parse(Deno.readTextFileSync("./user.json"));
 
@@ -39,11 +39,9 @@ const update = async () => {
   await displayResponse(await response.json());
 };
 
-
 export const displayEvents = (events) => {
   console.table(events.map(({ event_id, ...eventData }) => eventData));
 };
-
 
 export const getChoices = (events) => {
   const choices = events.map((event) => ({

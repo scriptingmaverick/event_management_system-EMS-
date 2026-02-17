@@ -22,7 +22,6 @@ export const formatResponse = (msg, success) => success ? green(msg) : red(msg);
 
 export const displayResponse = async (response) => {
   if (!response) {
-    await sleep(1500);
     console.clear();
     return;
   }
