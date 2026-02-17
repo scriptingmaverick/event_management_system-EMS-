@@ -13,7 +13,7 @@ const isValidPhone = (phone) => {
   return regex.test(phone);
 };
 
-const getNewValues = (fieldsToChange) => {
+const getValue = (field) => {
   const validation = {
     username: () => true,
     password: () => true,
@@ -21,18 +21,19 @@ const getNewValues = (fieldsToChange) => {
     dob: () => true,
     phone: isValidPhone,
   };
+  while (true) {
+    const value = prompt(`Enter new ${field}`);
+    if (validation[field](value)) {
+      return value;
+    }
+    console.log(red(`Invalid ${field}`));
+  }
+};
 
+const getNewValues = (fieldsToChange) => {
   const newValues = {};
   fieldsToChange.forEach((field) => {
-    let value;
-    while (true) {
-      value = prompt(`Enter new ${field}`);
-      if (validation[field](value)) {
-        break;
-      }
-      console.log(red(`Invalid ${field}`));
-    }
-    newValues[field] = value;
+    newValues[field] = getValue(field);
   });
   return newValues;
 };
