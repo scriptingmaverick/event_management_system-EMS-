@@ -55,6 +55,9 @@ const createTables = (db) => {
     username TEXT,
     password TEXT NOT NULL,
     email TEXT NOT NULL,
+    location TEXT,
+    dob TEXT,
+    phone TEXT,
     last_login TEXT,
     is_premium_user INTEGER NOT NULL DEFAULT 0 CHECK (is_premium_user IN (0,1)),
     created_at DEFAULT (DATETIME('now','localtime'))
