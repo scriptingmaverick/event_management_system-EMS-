@@ -4,13 +4,35 @@ import { BASE_URL, displayResponse } from "./utils.js";
 import { homePage } from "./home_page.js";
 import { userSubscriptions } from "./subscription_manager.js";
 import { createdEvents } from "./manage_created_events.js";
+import { red } from "jsr:@std/internal@^1.0.12/styles";
 
 export const userData = JSON.parse(Deno.readTextFileSync("./user.json"));
 
+const isValidPhone = (phone) => {
+  const regex = /^[6-9]\d{9}$/;
+  return regex.test(phone);
+};
+
 const getNewValues = (fieldsToChange) => {
+  const validation = {
+    username: () => true,
+    password: () => true,
+    location: () => true,
+    dob: () => true,
+    phone: isValidPhone,
+  };
+
   const newValues = {};
   fieldsToChange.forEach((field) => {
-    newValues[field] = prompt(`Enter new ${field}`);
+    let value;
+    while (true) {
+      value = prompt(`Enter new ${field}`);
+      if (validation[field](value)) {
+        break;
+      }
+      console.log(red(`Invalid ${field}`));
+    }
+    newValues[field] = value;
   });
   return newValues;
 };
